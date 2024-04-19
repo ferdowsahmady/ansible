@@ -1,3 +1,8 @@
 wer are practicing 
-
 branch 3 added
+
+if [ $rate = 50 ]   
+    then 
+    echo " this is not fair "
+fi 
+
