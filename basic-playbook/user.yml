@@ -1,0 +1,23 @@
+---
+- name: Create a user on remote hosts
+  hosts:  webservers
+  become: yes
+
+  vars: 
+    user_name:  ferdows
+    user_password:  "{{ 'password' | password_hash('sha512') }}"
+
+  tasks: 
+    - name: Add the user 'ferdows' with a specific uid and a primary group of wheel
+      user: 
+        name: ferdows
+        comment: ferdows-ahmady
+        uid: 5555
+        groups: wheel
+        state:  present
+        append: true
+        generate_ssh_key: yes
+        ssh_key_file: .ssh/deleteme
+        createhome: yes
+
+  

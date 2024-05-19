@@ -1,0 +1,22 @@
+---
+- hosts: webservers
+  gather_facts: yes
+  become: true
+  
+  tasks:
+    - name: remove apache2 and php packages on ubuntu
+      apt:
+        name: 
+          - apache2
+          - libapache2-mod-php 
+        state: absent
+      when: ansible_distribution == "Ubuntu"
+       
+    - name: remove httpd and php packages for "CentOS"
+      yum:
+        name: 
+          - httpd
+          - php 
+        state: absent
+      when: ansible_distribution == "CentOS"
+    
