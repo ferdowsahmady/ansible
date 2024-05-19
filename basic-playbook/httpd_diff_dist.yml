@@ -1,16 +1,24 @@
 ---
-- hosts: webservers
+- hosts: all
   become: yes
 
   tasks:
+    - name: install updates on CentOS
+      yum:
+        update_only: true
+        update_cache: true
+      when: ansible_distribution == "CentOS"
     
+- hosts: webservers
+  become: true
+
+  tasks:  
     - name: install apache2 and php packages for "Ubuntu"
       apt:
         name: 
           - apache2 
           - libapache2-mod-php
-        state: latest
-        update_cache: true
+        state: present
       when: ansible_distribution == "Ubuntu"
        
     - name: install httpd and php packages for centos
@@ -21,15 +29,40 @@
           - tree
         state: present
         update_cache: true
+        update_only:  true
       when: ansible_distribution == "CentOS"
-    
+
     # - name: copy index.html  
     #   template:
-    #     src: /home/ansible/ferdows-ansible/ansible/basic-playbook/index.html
-    #     dest: /var/www/html/index.html
+    #      src: /home/ansible/ferdows-ansible/ansible/basic-playbook/index.html
+    #      dest: /var/www/html/index.html
+    #      owner: apache
+    #      group: apache
+    #      mode: 644
 
+    #Handlers
     - name: start httpd service on centos dirstos
       service:
         name: httpd
         state:  started
         enabled:  true
+
+- hosts: dbservers
+  become: true
+  
+  tasks:  
+    - name: install mariadb server 
+      package:  
+        name: mariadb
+        state:  latest
+      when: ansible_distribution == "CentOS"  
+
+    - name: install mariadb-server Ubuntu
+      apt:
+        name: mariadb-server
+        state:  latest
+      when: ansible_distribution == "Ubuntu"
+
+
+
+    
