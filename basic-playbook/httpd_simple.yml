@@ -14,7 +14,8 @@
       copy:
         src: /home/ansible/ansible/basic-playbook/index.html
         dest: /var/www/html/index.html 
-
+    
+    # Handlers
     - name: httpd is started
       service:
         name: httpd 

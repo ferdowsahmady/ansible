@@ -1,0 +1,23 @@
+---
+- name: change httpd admin email in httpd config file
+  hosts: webservers
+  become: true
+
+  tasks: 
+    - name: modify a line starting with "ServerAdmin" in http config file
+      lineinfile: 
+        path: /etc/httpd/conf/httpd.conf
+        regexp: '^ServerAdmin' 
+        line: ServerAdmin Somebody@Somewhere.net 
+      register: httpd
+
+    - name: restart httpd "CentOS"
+      service:
+        name: httpd
+        state: restarted
+        enabled: true
+      when: httpd.changed
+
+
+
+    

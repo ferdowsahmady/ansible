@@ -5,19 +5,33 @@
 
   vars: 
     user_name:  ferdows
-    user_password:  "{{ 'password' | password_hash('sha512') }}"
-
+    
   tasks: 
     - name: Add the user 'ferdows' with a specific uid and a primary group of wheel
       user: 
-        name: ferdows
+        name: {{ user_name }}
         comment: ferdows-ahmady
         uid: 5555
         groups: wheel
         state:  present
         append: true
-        generate_ssh_key: yes
-        ssh_key_file: .ssh/deleteme
+        # generate_ssh_key: yes
+        # ssh_key_file: .ssh/deleteme
         createhome: yes
+        shell: bin/bash 
 
+    - name: add ssh key to the hosts for ansible to access serverless ssh  
+      authorized_key:
+        user: ferdows
+        key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE3lyhQfYwBMbyBa0fq00Ji+F7jaG3ZxiB9fiD72Djj0 ansible@fer-ansible-145.ziyotek.local"  
+
+
+    - name: add sudoers file for in remote_hosts for user "ferdows"
+      copy:
+        src: sudoer_ferdows
+        dest: /etc/sudoers.d/ferdows
+        owner: root
+        group: root 
+        mode: 0440
+       
   

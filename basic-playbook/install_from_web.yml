@@ -1,0 +1,23 @@
+---
+- name: download and install Terraform from web 
+  hosts: workstation 
+  become: yes
+  
+
+  tasks:
+    - name: install unzip 
+      package:
+        name: unzip
+
+    - name: install Terraform in localhost
+      unarchive:
+        src: https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+        dest: /usr/local/bin
+        remote_src: true        ## means src is not located in localhost.
+        mode: 755
+        owner: root
+        group: root
+
+
+
+
